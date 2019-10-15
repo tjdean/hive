@@ -23,7 +23,7 @@ import java.sql.SQLTransactionRollbackException;
 
 /** Database product infered via JDBC. */
 public enum DatabaseProduct {
-  DERBY, MYSQL, POSTGRES, ORACLE, SQLSERVER, OTHER;
+  DERBY, MYSQL, POSTGRES, ORACLE, SQLSERVER, DB2, OTHER;
 
   /**
    * Determine the database product type
@@ -45,6 +45,8 @@ public enum DatabaseProduct {
       return ORACLE;
     } else if (productName.contains("postgresql")) {
       return POSTGRES;
+    } else if (productName.contains("db2")) {
+      return DB2;
     } else {
       return OTHER;
     }
@@ -52,7 +54,7 @@ public enum DatabaseProduct {
 
   public static boolean isDeadlock(DatabaseProduct dbProduct, SQLException e) {
     return e instanceof SQLTransactionRollbackException
-        || ((dbProduct == MYSQL || dbProduct == POSTGRES || dbProduct == SQLSERVER)
+        || ((dbProduct == MYSQL || dbProduct == POSTGRES || dbProduct == SQLSERVER || dbProduct == DB2)
             && "40001".equals(e.getSQLState()))
         || (dbProduct == POSTGRES && "40P01".equals(e.getSQLState()))
         || (dbProduct == ORACLE && (e.getMessage() != null && (e.getMessage().contains("deadlock detected")

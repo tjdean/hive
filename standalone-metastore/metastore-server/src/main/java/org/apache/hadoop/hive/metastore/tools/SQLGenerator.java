@@ -158,6 +158,7 @@ public final class SQLGenerator {
     case MYSQL:
     case POSTGRES:
     case SQLSERVER:
+    case DB2:
       for (int numRows = 0; numRows < rows.size(); numRows++) {
         if (numRows % MetastoreConf.getIntVar(conf, ConfVars.DIRECT_SQL_MAX_ELEMENTS_VALUES_CLAUSE) == 0) {
           if (numRows > 0) {
@@ -201,6 +202,8 @@ public final class SQLGenerator {
       //https://docs.oracle.com/cd/E17952_01/refman-5.6-en/select.html
     case POSTGRES:
       //http://www.postgresql.org/docs/9.0/static/sql-select.html
+    case DB2:
+      //https://www.ibm.com/support/knowledgecenter/en/SSEPGG_11.5.0/com.ibm.db2.luw.sql.ref.doc/doc/r0059218.html
       return selectStatement + " for update";
     case SQLSERVER:
       //https://msdn.microsoft.com/en-us/library/ms189499.aspx
@@ -232,6 +235,8 @@ public final class SQLGenerator {
     switch (dbProduct) {
     case DERBY:
       //http://db.apache.org/derby/docs/10.7/ref/rrefsqljoffsetfetch.html
+    case DB2:
+      //https://www.ibm.com/support/knowledgecenter/en/SSEPGG_11.5.0/com.ibm.db2.luw.sql.ref.doc/doc/r0059212.html
       return "select " + noSelectsqlQuery + " fetch first " + numRows + " rows only";
     case MYSQL:
       //http://www.postgresql.org/docs/7.3/static/queries-limit.html

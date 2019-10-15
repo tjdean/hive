@@ -3875,6 +3875,7 @@ abstract class TxnHandler implements TxnStore, TxnStore.MutexAPI {
       String s;
       switch (dbProduct) {
         case DERBY:
+        case DB2:
           s = "values current_timestamp";
           break;
 
@@ -5243,6 +5244,11 @@ abstract class TxnHandler implements TxnStore, TxnStore.MutexAPI {
         break;
       case POSTGRES:
         //http://www.postgresql.org/docs/8.1/static/errcodes-appendix.html
+        if("23505".equals(ex.getSQLState())) {
+          return true;
+        }
+      case DB2:
+        //https://www.ibm.com/support/knowledgecenter/en/SSEPGG_11.5.0/com.ibm.db2.luw.messages.doc/doc/rdb2stt.html
         if("23505".equals(ex.getSQLState())) {
           return true;
         }
